@@ -17,6 +17,23 @@ import { Network } from '@ionic-native/network';
 import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { LocationSelectPage } from "../pages/location-select/location-select";
+import { LoginPage } from "../pages/login/login";
+
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireModule } from 'angularfire2';
+
+var firebaseConfig = {
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyBP9__r9I3MpOlLy4UWjQQLFLXyYfr-hjc",
+    authDomain: "accompa-me.firebaseapp.com",
+    databaseURL: "https://accompa-me.firebaseio.com",
+    projectId: "accompa-me",
+    storageBucket: "accompa-me.appspot.com",
+    messagingSenderId: "514304181087"
+  }
+  };
 
 @NgModule({
   declarations: [
@@ -25,11 +42,15 @@ import { LocationSelectPage } from "../pages/location-select/location-select";
     ContactPage,
     HomePage,
     TabsPage,
-    LocationSelectPage
+    LocationSelectPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig.firebase),
+    AngularFireDatabaseModule, // imports firebase/database, only needed for database features
+    AngularFireAuthModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,7 +59,8 @@ import { LocationSelectPage } from "../pages/location-select/location-select";
     ContactPage,
     HomePage,
     TabsPage,
-    LocationSelectPage
+    LocationSelectPage,
+    LoginPage
   ],
   providers: [
     Geolocation,

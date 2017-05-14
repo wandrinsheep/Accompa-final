@@ -4,15 +4,19 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>Login</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
 
 <ion-content padding>
+    <ion-card class="centerstuff">
+        <ion-card-header class="headerstuff">
+            <h2>Sign-in With Facebook</h2>
+        </ion-card-header>
 
+        <ion-item class="centerstuff2">
+            <ion-icon name="contact" large></ion-icon>
+        </ion-item>
+
+        <button ion-button large block outline (click)="loginwithFacebook">
+               <ion-icon name="logo-facebook" ></ion-icon>
+               </button>
+    </ion-card>
 </ion-content>
