@@ -14,6 +14,9 @@ import { LocationTrackerProvider } from '../providers/location-tracker/location-
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Network } from '@ionic-native/network';
+import { ConnectivityServiceProvider } from '../providers/connectivity-service/connectivity-service';
+import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { LocationSelectPage } from "../pages/location-select/location-select";
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { Network } from '@ionic-native/network';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    LocationSelectPage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,8 @@ import { Network } from '@ionic-native/network';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    LocationSelectPage
   ],
   providers: [
     Geolocation,
@@ -42,7 +47,9 @@ import { Network } from '@ionic-native/network';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LocationTrackerProvider
+    LocationTrackerProvider,
+    ConnectivityServiceProvider,
+    GoogleMapsProvider
   ]
 })
 export class AppModule {}

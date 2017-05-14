@@ -25,7 +25,6 @@ export class LocationTrackerProvider {
  startTracking() {
  
   // Background Tracking
- 
   let config = {
     desiredAccuracy: 0,
     stationaryRadius: 20,
