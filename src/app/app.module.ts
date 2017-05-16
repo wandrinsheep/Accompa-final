@@ -22,6 +22,8 @@ import { LoginPage } from "../pages/login/login";
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
+import { AuthProvider } from '../providers/auth/auth';
+import {Facebook} from '@ionic-native/facebook';
 
 var firebaseConfig = {
   production: false,
@@ -63,6 +65,7 @@ var firebaseConfig = {
     LoginPage
   ],
   providers: [
+    Facebook,
     Geolocation,
     BackgroundGeolocation,
     Network,
@@ -71,7 +74,8 @@ var firebaseConfig = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LocationTrackerProvider,
     ConnectivityServiceProvider,
-    GoogleMapsProvider
+    GoogleMapsProvider,
+    AuthProvider
   ]
 })
 export class AppModule {}
