@@ -50,8 +50,7 @@ export class AuthProvider {
                        let yournode= this.af.list('users').$ref.orderByChild('/facebookid').equalTo(id).once
                        ('value',(node)=>{node.forEach((childnode)=>{
                          console.log(childnode.key);
-                         childnode.ref.child('friends').update({[_response.authResponse.userID]:firebaseData.displayName}).then;
-                         //friendkey=childnode.key
+                         childnode.ref.child('friends').update({[_response.authResponse.userID.toString()]:firebaseData.displayName}).then;
                          return true})});
                       
                    }) ;
@@ -79,6 +78,10 @@ export class AuthProvider {
           
                     
           
+    }
+
+    Signout(){
+      this.afauth.auth.signOut();
     }
 
   }

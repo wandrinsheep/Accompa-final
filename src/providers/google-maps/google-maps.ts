@@ -4,6 +4,9 @@ import 'rxjs/add/operator/map';
 import { ConnectivityServiceProvider } from "../connectivity-service/connectivity-service";
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundGeolocation } from "@ionic-native/background-geolocation";
+import { AngularFireAuth } from "angularfire2/auth";
+import { Observable } from "rxjs/Observable";
+import * as firebase from 'firebase/app';
 
 /*
   Generated class for the GoogleMapsProvider provider.
@@ -15,6 +18,7 @@ import { BackgroundGeolocation } from "@ionic-native/background-geolocation";
 declare var google:any;
 @Injectable()
 export class GoogleMapsProvider {
+  user: Observable<firebase.User>
   
   mapElement: any;
   pleaseConnect: any;
@@ -25,7 +29,7 @@ export class GoogleMapsProvider {
   currentMarker: any;
   apiKey: string = 'AIzaSyB5GBWNTdmMB7R7T2ntrpjTqK3kt8fPq5E';
  
-  constructor(public connectivityService: ConnectivityServiceProvider, public geolocation: Geolocation, public backgroundgeolocation: BackgroundGeolocation) {
+  constructor(public connectivityService: ConnectivityServiceProvider, public geolocation: Geolocation, public backgroundgeolocation: BackgroundGeolocation,public db: AngularFireAuth) {
  
   }
  
@@ -107,7 +111,42 @@ export class GoogleMapsProvider {
         }
  
         this.map = new google.maps.Map(this.mapElement, mapOptions);
+        /*-----------------------------------------------------------------------------------------*/
+
+       /* this.user=this.db.authState;
+      this.user.subscribe(userdata=>{
+          if(userdata){
+            let config = {
+    desiredAccuracy: 0,
+    stationaryRadius: 20,
+    distanceFilter: 10, 
+    debug: true,
+    interval: 2000,
+    url: "https://accompa-me.firebaseio.com/geohistory/"+userdata.uid+".json",
+    stopOnTerminate: false 
+  };
+ 
+  this.backgroundgeolocation.configure(config).subscribe((location) => {
+    this.map.setCenter(location.coords.latitude,location.coords.longitude);
+    console.log('BackgroundGeolocation:  ' + location.latitude + ',' + location.longitude);
+ 
+    // Run update inside of Angular's zone
+ 
+  }, (err) => {
+ 
+    console.log('position err'+ err);
+ 
+  });
+ 
+  // Turn ON the background-geolocation system.
+  this.backgroundgeolocation.start();
+          }
+      })*/
+    
+
+        
         resolve(true);
+        
  
       });
  
@@ -157,39 +196,8 @@ export class GoogleMapsProvider {
       this.disableMap();
  
     });
-
-   
- 
   }
   
-   startTracking():void
-    {
-    let config = {
-    desiredAccuracy: 0,
-    stationaryRadius: 20,
-    distanceFilter: 10, 
-    debug: true,
-    interval: 2000,
-    url: "https://accompa-me.firebaseio.com/geohistory.json",
-    stopOnTerminate: false 
-  };
- 
-  this.backgroundgeolocation.configure(config).subscribe((location) => {
- 
-    console.log('BackgroundGeolocation:  ' + location.latitude + ',' + location.longitude);
- 
-    // Run update inside of Angular's zone
- 
-  }, (err) => {
- 
-    console.log(err);
- 
-  });
- 
-  // Turn ON the background-geolocation system.
-  this.backgroundgeolocation.start();
-  }
-
     addMarker(){
 
     }

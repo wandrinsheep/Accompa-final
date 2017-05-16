@@ -24,6 +24,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { AuthProvider } from '../providers/auth/auth';
 import {Facebook} from '@ionic-native/facebook';
+import { FriendsPage } from "../pages/friends/friends";
 
 var firebaseConfig = {
   production: false,
@@ -45,7 +46,8 @@ var firebaseConfig = {
     HomePage,
     TabsPage,
     LocationSelectPage,
-    LoginPage
+    LoginPage,
+    FriendsPage
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,8 @@ var firebaseConfig = {
     HomePage,
     TabsPage,
     LocationSelectPage,
-    LoginPage
+    LoginPage,
+    FriendsPage
   ],
   providers: [
     Facebook,

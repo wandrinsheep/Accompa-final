@@ -1,11 +1,39 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      About
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>
+            <h3>Your Profile</h3>
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content class="prof-card">
+    <div>
+        <ion-item>
+            <ion-avatar item-left>
+                <h2>{{ (items | async)?.name }}</h2>
+                <img src="{{ (items | async)?.image }}">
+            </ion-avatar>
+        </ion-item>
+    </div>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='thumbs-up'></ion-icon>
+      </button>
+            </ion-col>
+            <ion-col>
+                <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='text'></ion-icon>
+      </button>
+            </ion-col>
+            <ion-col align-self-center text-center>
+                <button ion-button color="primary" clear small icon-left (click)="toFriends()">
+                   <ion-icon name="contacts"></ion-icon>
+               </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <hr>
+    <p>Reviews go here</p>
 </ion-content>
