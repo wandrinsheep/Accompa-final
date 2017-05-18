@@ -4,9 +4,12 @@ import { NavController, ModalController } from 'ionic-angular';
 import { LocationSelectPage } from "../location-select/location-select";
 import { GoogleMapsProvider } from "../../providers/google-maps/google-maps";
 import { BackgroundGeolocation } from "@ionic-native/background-geolocation";
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AngularFireAuth } from "angularfire2/auth";
 import { Observable } from "rxjs/Observable";
 import * as firebase from 'firebase/app';
+import GeoFire from 'geofire'; 
+
 
 
 declare var google:any;
@@ -17,7 +20,11 @@ declare var google:any;
 export class HomePage {
  @ViewChild('map') mapElement: ElementRef;
  @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
- user: Observable<firebase.User>
+ user: Observable<firebase.User>;
+ watch:any;
+ firebaseRef = firebase.database().ref('geolocation');
+ geoFire = new GeoFire(this.firebaseRef);
+ geoQuery: any;
 
 /*  constructor(public navCtrl: NavController, public locationTracker: LocationTrackerProvider) {
  
@@ -30,57 +37,62 @@ export class HomePage {
   stop(){
     this.locationTracker.stopTracking();
   }*/
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController,public backgroundgeolocation: BackgroundGeolocation,public maps:GoogleMapsProvider, public db: AngularFireAuth) {
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController,public backgroundgeolocation: BackgroundGeolocation,public maps:GoogleMapsProvider, public db: AngularFireAuth, private geolocation:Geolocation) {
  
   }
    ionViewDidLoad(): void {
  
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
-           let latLng = new google.maps.LatLng(17.942561394134792,-77.23381950414623);
+          let options = {
+              frequency: 6000, 
+               enableHighAccuracy: true
+                        };
+
               var marker1 = new google.maps.Marker({
-              position: latLng,
               map: this.maps.map,
+              position:this.maps.map.getCenter(),
               title: 'Hello World!'
-        });
+            });
+            let circle = new google.maps.Circle({
+              map: this.maps.map,
+              strokeOpacity: 0.6,
+              strokeWeight: 1,
+              strokeColor: '#00BFFF',
+              radius: 1609,    
+              fillColor: '#87CEFA',
+              fillOpacity: 0.35,
+                    });
+                    circle.bindTo('center',marker1,'position');
+          this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) =>{ 
+     
+               console.log(position);
+               let latLng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+               marker1.setPosition(latLng);
+               this.maps.map.setCenter(marker1.getPosition());
+               
+        //-----------------------------Query other locations---------------------------------
+               if (this.geoQuery) {
+    // If the GeoQuery already exists, the user's location has moved, and we
+    // should update the GeoQuery's center
+                  this.geoQuery.updateCriteria({
+                    center: marker1.getPosition()
+                                      });
+                             } 
+                else {
+    // If this is the first time retrieving the user's location, create a new GeoQuery
+    // instance and set up our key_entered event listener
+                    this.geoQuery = this.geoFire.query(
+                      {center: marker1.getPosition(), radius: 2}
+                          );
+                  }
            
  
-          /*this.user=this.db.authState;
-          this.user.subscribe(userdata=>{
-          if(userdata){
-            let config = {
-             desiredAccuracy: 0,
-             stationaryRadius: 20,
-             distanceFilter: 10, 
-             debug: true,
-             interval: 2000,
-            url: "https://accompa-me.firebaseio.com/geohistory/"+userdata.uid+".json",
-            stopOnTerminate: false 
-         };
- 
-    this.backgroundgeolocation.configure(config).subscribe((location) => {
-       let latLng = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
-       var marker1 = new google.maps.Marker({
-          position: latLng,
-          title: 'Hello World!'
-        });
-      marker1.setMap(this.maps.map)
-    this.maps.map.setCenter(marker1.getPosition());
-    console.log('BackgroundGeolocation:  ' + location.coords.latitude + ',' + location.coords.longitude);
- 
-    // Run update inside of Angular's zone
- 
-  }, (err) => {
- 
-    console.log('position err'+ err);
- 
-  });
- 
-  // Turn ON the background-geolocation system.
-  this.backgroundgeolocation.start();
-          }
-      })*/
- 
-        }); }
+         },
+         err=>{console.log(err);}
+          )
+        },
+        (err)=>{console.log(err)}
+        )}
  
 
     launchLocationPage(){
