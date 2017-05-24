@@ -1,4 +1,4 @@
-<ion-header>
+<!--<ion-header>
     <ion-navbar>
         <ion-title>
             <h3>Your Profile</h3>
@@ -36,4 +36,63 @@
     </ion-grid>
     <hr>
     <p>Reviews go here</p>
+</ion-content>-->
+
+ <ion-header>
+  <ion-navbar>
+    <ion-title>Your Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="profilebg">
+  <ion-card>
+    <img src= "{{ (items | async)?.image }}"/><!--Person's profile pic-->
+    <div class="bgtitle">Person's Name {{ (items | async)?.name }} </div>
+    <div class="score">Person's trustscore {{ (items | async)?.trustscore }}</div>
+  </ion-card>
+
+  <ion-card>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <button ion-button color="primary" clear small>
+        <ion-icon name='thumbs-up'></ion-icon>
+      </button>
+            </ion-col>
+            <ion-col>
+                <button ion-button color="primary" clear small>
+        <ion-icon name='text'></ion-icon>
+      </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+  </ion-card>
+  
+  <button ion-button block ion-button (click)="toFriends()" icon-left>
+    <ion-icon name="people"></ion-icon>
+    View Compames
+  </button>
+
+    <h2>Reviews!</h2>
+
+    <ion-list>
+      <!--
+          <ion-item ng-repeat="review in reviews">
+            {{review.text}}
+      -->
+            <ion-item>
+              <hr>
+              <ion-avatar item-left>
+                <img src="assets/cats,jpg">
+              </ion-avatar>
+              <h2>Finn the Human/Reviewee</h2>
+              <h3>Horrible!!!/Review title maybe</h3>
+              <p>Mathematical.../actual review</p>
+              <hr>
+
+          </ion-item>
+          <ion-item > <button ion-button round (click)="logout()">Sign Out</button></ion-item>
+        </ion-list>
+      
+
 </ion-content>

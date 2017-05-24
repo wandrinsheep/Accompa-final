@@ -15,10 +15,10 @@
 
 <ion-content padding>
  <ion-list>
-      <ion-item-sliding >
+      <ion-item-sliding *ngFor="let item of items  | async">
           <ion-item>
               <ion-avatar item-left>
-                {{ (items|async)?.name }}
+                {{ (items|async)?.val }}
               </ion-avatar>
           </ion-item>
           <ion-item-options slide="right">

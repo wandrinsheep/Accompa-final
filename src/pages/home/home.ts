@@ -27,8 +27,9 @@ export class HomePage {
  geoFire = new GeoFire(this.firebaseRef);
  lasttime = 0;
  geoQuery = this.geoFire.query(
-                      {center: [0,0], radius: 3}
+                      {center: [0,0], radius: 20}
                         );
+geoloc: Geoposition;
 markers = []; 
 notexists:boolean = false;
             
@@ -50,6 +51,11 @@ notexists:boolean = false;
  
   }
    ionViewDidLoad(): void {
+
+            
+            //this.Locationupdater();
+          //  setInterval( console.log(this.geoloc.coords.latitude+' '+this.geoloc.coords.longitude), 3000);
+
 
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
           let options = {
@@ -73,7 +79,20 @@ notexists:boolean = false;
                     });
               circle.bindTo('center',marker1,'position');
 
+         
+        /* let user= this.markers.forEach(data=>{
+             this.auth.authState.subscribe(userdat =>{
+            let loc = this.geoFire.get(data);
+           let  finalloc=new google.maps.LatLng(loc[0],loc[1]);
+              var marker = new google.maps.Marker({
+              map: this.maps.map,
+              position:finalloc,
+              title: 'Hello World!'
+            }); }).unsubscribe();
+          })*/
           
+            
+           
             
                //----------------------geofire initialisation-------------------
               
@@ -105,24 +124,26 @@ notexists:boolean = false;
                     console.log("data set");
                   });
 
-                  this.geoQuery.on("key_entered", (keys)=>{
+                  this.geoQuery.on("key_entered", (keys,loc,distance)=>{
                     
-                      if(this.markers.some((val)=>{if(val ===keys){return true}}))
+                      if(this.markers.some((val)=>{if(val === keys){return true}}))
                       {
-                       console.log('duplicate');
+                            console.log('duplicate');
                       }
                       else { 
                         if(keys !== info.uid)
-                        this.markers.push(keys)
+                         console.log('this key'+ keys +' is this far'+ distance );
+                         this.markers.push(keys)
+                       
                       }
                     });
 
-                    this.geoQuery.on("key_exited", (keys)=>{
+                    this.geoQuery.on("key_exited", (keys,loc,distance)=>{
                     
                       if(this.markers.some((val)=>{if(val ===keys){return true}}))
                       {
                        this.markers.splice(this.markers.indexOf(keys));
-                       console.log('key removed'+keys );
+                         console.log('key removed'+keys );
                       }
                     });
                   })
@@ -167,12 +188,14 @@ notexists:boolean = false;
               }*/
              
                
-         },
+        }, 
          err=>{console.log(err);}
-          )
-        },
+        )
+        }, 
         (err)=>{console.log(err)}
-        )}
+        )
+    
+  }
  
 
     launchLocationPage(){
@@ -186,19 +209,21 @@ notexists:boolean = false;
         modal.present();    
  
     }
-    exists(key, index, array){
-      if(array[index] ===key)
-      {
-        return true;
-      }
-     else{
-       false;
-     }
+
+    ionViewDidLeave(): void{
 
     }
 
+    Locationupdater(){
+     setInterval(()=>{this.geolocation.getCurrentPosition().then(r=>{
+       console.log(r.coords.latitude);
+     })},3000)
     
+  
+}
+    
+     
+    }
     
    
 
-}

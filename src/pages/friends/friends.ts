@@ -20,14 +20,18 @@ import * as firebase from 'firebase/app';
 export class FriendsPage {
 
  user: Observable<firebase.User>;;
-items= {name: "loading"};
+items:any;
   constructor(public navCtrl: NavController, private auth: AuthProvider, private af: AngularFireAuth, private data: AngularFireDatabase) {
     
-     this.user =this.af.authState
+    /* this.user =this.af.authState
      this.user.subscribe(authData => {
         if (authData) {
        this.data.list('users/'+authData.uid+'/friends').forEach((friend)=>{friend.forEach((idkey)=>{this.items.name = idkey.$value;
-      console.log(idkey.$value) })})}});
+      console.log(idkey.$value) })})}});*/
+      this.user =this.af.authState
+     this.user.subscribe(authData => {
+        if (authData) {
+      this.items= this.data.list('users/'+authData.uid+'/friends')}});
      
     
   }
