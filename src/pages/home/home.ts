@@ -21,7 +21,7 @@ declare var google:any;
 export class HomePage {
  @ViewChild('map') mapElement: ElementRef;
  @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
- user: Observable<firebase.User>;
+ user: Observable<firebase.User> = this.auth.authState;
  watch:any;
  firebaseRef = firebase.database().ref('geolocation');
  geoFire = new GeoFire(this.firebaseRef);
@@ -55,9 +55,10 @@ notexists:boolean = false;
             
             //this.Locationupdater();
           //  setInterval( console.log(this.geoloc.coords.latitude+' '+this.geoloc.coords.longitude), 3000);
+          this.Locationupdater();
 
 
-        let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
+       /* let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
           let options = {
                enableHighAccuracy: true,
                maximumAge:600000
@@ -104,7 +105,7 @@ notexists:boolean = false;
               //-----------------------------
          // this.geolocation.getCurrentPosition().then(res=>{this.lasttime = res.timestamp});
            
-        this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) =>{ 
+       /* this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) =>{ 
     
              
                console.log(position);
@@ -188,12 +189,12 @@ notexists:boolean = false;
               }*/
              
                
-        }, 
-         err=>{console.log(err);}
-        )
-        }, 
-        (err)=>{console.log(err)}
-        )
+       //this must be removed to work }, 
+        //this must be removed to work err=>{console.log(err);}
+        //this must be removed to work )   end of geolocation watch*/
+       //this must be removed to work }, 
+       //this must be removed to work (err)=>{console.log(err)}
+      //this must be removed to work  )*/
     
   }
  
@@ -215,14 +216,20 @@ notexists:boolean = false;
     }
 
     Locationupdater(){
-     setInterval(()=>{this.geolocation.getCurrentPosition().then(r=>{
-       console.log(r.coords.latitude);
-     })},3000)
-    
-  
-}
-    
+      this.user.subscribe(info =>{ 
+      setInterval(()=>{this.geolocation.getCurrentPosition().then(r=>{
+       this.geoloc = r;
+       console.log(this.geoloc.timestamp);
+     })},3000);
      
+     let geolatlng = [this.geoloc.coords.latitude,this.geoloc.coords.longitude]
+      this.geoFire.set(info.uid,geolatlng).then(result=>{console.log('data set')});
+    
+        } ) 
+     
+        }
+
+  
     }
     
    
