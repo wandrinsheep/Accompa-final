@@ -80,16 +80,19 @@ notexists:boolean = false;
               circle.bindTo('center',marker1,'position');
 
          
-        /* let user= this.markers.forEach(data=>{
+            this.markers.forEach(data=>{
              this.auth.authState.subscribe(userdat =>{
-            let loc = this.geoFire.get(data);
-           let  finalloc=new google.maps.LatLng(loc[0],loc[1]);
+             this.geoFire.get(data).then(location=>
+            {
+              let  finalloc=new google.maps.LatLng(location[0],location[1]); 
               var marker = new google.maps.Marker({
               map: this.maps.map,
               position:finalloc,
               title: 'Hello World!'
-            }); }).unsubscribe();
-          })*/
+            }); 
+           })
+        });   
+      })
           
             
            
